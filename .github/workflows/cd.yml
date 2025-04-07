@@ -35,7 +35,7 @@ jobs:
       - name: Package
         run: |
           # jar 
-          mvn -P windows,windows-arm64,linux,linux-arm64,mmac,mac-arm64 package
+          mvn -P windows,windows-arm64,linux,linux-arm64,mac,mac-arm64 package
           mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce-lwjgl.jar
 
           # natives
