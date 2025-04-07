@@ -32,15 +32,21 @@ jobs:
           distribution: 'corretto'
           java-version: '8'
 
-      - name: Package jar
+      - name: Package
         run: |
-          make natives package
+          # natives
+          make natives
+          zip -9 -r natives.zip natives
+
+          # jar 
+          mvn package
           mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce-lwjgl.jar
+
+          # release
+          zip -9 triforce-lwjgl.zip triforce-lwjgl.jar launcher.sh
 
       - name: Create release
         if: success()
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            natives.zip
-            triforce-lwjgl.jar
+          files: triforce-lwjgl.zip
