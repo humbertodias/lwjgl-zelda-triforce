@@ -27,6 +27,11 @@ mvn package
 java -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
 ```
 
+For macOS arm64
+```shell
+java -XstartOnFirstThread -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
+```
+
 
 ### Output
 ![Preview](doc/triforce.gif)
