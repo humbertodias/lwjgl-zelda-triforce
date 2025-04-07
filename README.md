@@ -3,7 +3,7 @@
 
 # Zelda Triforce with LWJGL
 
-Simple Zelda Triforce animation with Java Binding for the OpenGL
+Simple Zelda Triforce animation with Java Binding for the LWJGL
 
 ### Prerequisites
 
