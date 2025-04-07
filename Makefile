@@ -14,7 +14,7 @@ run:
 LWJGL_VERSION=3.3.6
 natives:
 	mkdir -p natives
-	find ${HOME}/.m2 -name lwjgl-platform-${LWJGL_VERSION}-natives-*.jar -exec unzip -o {} -d natives \;
+	find ${HOME}/.m2 -name lwjgl-${LWJGL_VERSION}-natives-*.jar -exec unzip -o {} -d natives \;
 
 clean:
 	rm -rf natives target
