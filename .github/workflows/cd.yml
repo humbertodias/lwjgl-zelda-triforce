@@ -34,7 +34,7 @@ jobs:
 
       - name: Package jar
         run: |
-          mvn natives package
+          make natives package
           mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce-lwjgl.jar
 
       - name: Create release
