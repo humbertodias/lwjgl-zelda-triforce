@@ -36,14 +36,13 @@ jobs:
         run: |
           # natives
           make natives
-          zip -9 -r natives.zip natives
 
           # jar 
           mvn package
           mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce-lwjgl.jar
 
           # release
-          zip -9 triforce-lwjgl.zip triforce-lwjgl.jar launcher.sh
+          zip -9 -r triforce-lwjgl.zip natives triforce-lwjgl.jar launcher.sh
 
       - name: Create release
         if: success()
