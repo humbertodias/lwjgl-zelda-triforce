@@ -8,7 +8,7 @@ Simple Zelda Triforce animation with Java Binding for the LWJGL
 ### Prerequisites
 
 1. Git 2.6+
-2. Maven 3+
+2. Maven 3.6.3+
 3. Java 8+
 
 ### How to Play
@@ -23,15 +23,8 @@ cd zelda-triforce-lwjgl
 Run
 
 ```shell
-mvn package
-java -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
+make natives package run
 ```
-
-For macOS arm64
-```shell
-java -XstartOnFirstThread -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
-```
-
 
 ### Output
 ![Preview](doc/triforce.gif)

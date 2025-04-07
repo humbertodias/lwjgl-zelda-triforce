@@ -34,17 +34,13 @@ jobs:
 
       - name: Package jar
         run: |
-          mvn package
+          mvn natives package
           mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce-lwjgl.jar
 
       - name: Create release
         if: success()
         uses: softprops/action-gh-release@v2
         with:
-          files: triforce-lwjgl.jar
-
-      - name: Upload release asset
-        uses: actions/upload-artifact@v4
-        with:
-          name: triforce-lwjgl
-          path: triforce-lwjgl.jar
+          files: |
+            natives.zip
+            triforce-lwjgl.jar
