@@ -34,6 +34,4 @@ java -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
 
 ### References
 
-[https://jogamp.org/wiki/index.php/Maven](https://jogamp.org/wiki/index.php/Maven)
-
 [https://www.lwjgl.org/guide](https://www.lwjgl.org/guide)
