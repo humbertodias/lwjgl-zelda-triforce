@@ -35,7 +35,7 @@ jobs:
       - name: Package jar
         run: |
           mvn package
-          mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce.jar
+          mv target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar triforce-lwjgl.jar
 
       - name: Create release
         if: success()
@@ -46,5 +46,5 @@ jobs:
       - name: Upload release asset
         uses: actions/upload-artifact@v4
         with:
-          name: triforce
-          path: triforce.jar
+          name: triforce-lwjgl
+          path: triforce-lwjgl.jar
