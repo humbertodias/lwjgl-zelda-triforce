@@ -13,8 +13,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <lwjgl.version>3.3.6</lwjgl.version>
         <main.class>lwjgl.zelda.triforce.Main</main.class>
+        <lwjgl.version>3.3.6</lwjgl.version>
+        <lwjgl.natives>natives-linux</lwjgl.natives>
     </properties>
 
     <description>Choose a 3D game, create a document with an analysis of its graphical aspects. Then, choose a scene
