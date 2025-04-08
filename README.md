@@ -23,7 +23,7 @@ cd zelda-triforce-lwjgl
 Run
 
 ```shell
-make natives package run
+make package run
 ```
 
 ### Output

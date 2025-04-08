@@ -1,29 +1,45 @@
-.PHONY: natives
-
 OS := $(shell uname -s)
+ARCH := $(shell uname -m)
 
-JAVA_OPTS = -Djava.library.path=natives
 ifeq ($(OS),Darwin)
-JAVA_OPTS += -XstartOnFirstThread
+	ifeq ($(ARCH),arm64)
+		PLATFORM := macos-arm64
+	else
+		PLATFORM := macos
+	endif
+else ifeq ($(OS),Linux)
+	ifeq ($(ARCH),aarch64)
+		PLATFORM := linux-arm64
+	else
+		PLATFORM := linux
+	endif
+else ifeq ($(OS),Windows_NT)
+	ifeq ($(ARCH),ARM64)
+		PLATFORM := windows-arm64
+	else
+		PLATFORM := windows
+	endif
+endif
+
+JAVA_OPTS=
+ifeq ($(OS),Darwin)
+JAVA_OPTS+=-XstartOnFirstThread
 endif
 
 package:
-	mvn package
+	echo "PLATFORM: $(PLATFORM)"
+	mvn -Dlwjgl.natives=natives-$(PLATFORM) package
 
 run:
-	java ${JAVA_OPTS} -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
+	java $(JAVA_OPTS) -jar target/lwjgl-zelda-triforce-1.0-SNAPSHOT.jar
 
-NATIVES_CLASSIFIER := windows windows-arm64 linux linux-arm64 macos macos-arm64
-natives-classifier:
-	@for CLASSIFIER in $(NATIVES_CLASSIFIER); do \
-		echo "Downloading classifier dependencies: $$CLASSIFIER"; \
-		mvn dependency:go-offline -Dlwjgl.natives=natives-$$CLASSIFIER || exit $$?; \
+PLATFORMS := windows windows-arm64 linux linux-arm64 macos macos-arm64
+natives:
+	@for PLATFORM in $(PLATFORMS); do \
+		echo "Packaging for $$PLATFORM"; \
+		mvn -Dlwjgl.natives=natives-$$PLATFORM clean package ;\
+		cp target/lwjgl-zelda-*.jar triforce-lwjgl-$$PLATFORM.jar ;\
 	done
 
-LWJGL_VERSION=3.3.6
-natives:	natives-classifier
-	mkdir -p natives
-	find ${HOME}/.m2 -name lwjgl-*-${LWJGL_VERSION}-natives-*.jar -exec cp {} natives/ \;
-
 clean:
-	rm -rf natives target
+	mvn clean

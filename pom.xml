@@ -16,9 +16,12 @@
         <main.class>lwjgl.zelda.triforce.Main</main.class>
         <lwjgl.version>3.3.6</lwjgl.version>
         <lwjgl.natives>natives-linux</lwjgl.natives>
+        <!-- change it for your platform -->
+        <!-- natives-windows natives-windows-arm64 natives-linux natives-linux-arm64 natives-macos natives-macos-arm64 -->
     </properties>
 
-    <description>Choose a 3D game, create a document with an analysis of its graphical aspects. Then, choose a scene
+    <description>
+        Choose a 3D game, create a document with an analysis of its graphical aspects. Then, choose a scene
         from this game to be modeled in OpenGL
     </description>
 
@@ -89,72 +92,36 @@
     <profiles>
         <profile>
             <id>windows</id>
-            <activation>
-                <os>
-                    <name>Windows</name>
-                    <arch>x86_64</arch>
-                </os>
-            </activation>
             <properties>
                 <lwjgl.natives>natives-windows</lwjgl.natives>
             </properties>
         </profile>
         <profile>
             <id>windows-arm64</id>
-            <activation>
-                <os>
-                    <name>Windows</name>
-                    <arch>aarch64</arch>
-                </os>
-            </activation>
             <properties>
                 <lwjgl.natives>natives-windows-arm64</lwjgl.natives>
             </properties>
         </profile>
         <profile>
             <id>linux</id>
-            <activation>
-                <os>
-                    <name>Linux</name>
-                    <arch>x86_64</arch>
-                </os>
-            </activation>
             <properties>
                 <lwjgl.natives>natives-linux</lwjgl.natives>
             </properties>
         </profile>
         <profile>
             <id>linux-arm64</id>
-            <activation>
-                <os>
-                    <name>Linux</name>
-                    <arch>aarch64</arch>
-                </os>
-            </activation>
             <properties>
                 <lwjgl.natives>natives-linux-arm64</lwjgl.natives>
             </properties>
         </profile>
         <profile>
             <id>mac</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                    <arch>x86_64</arch>
-                </os>
-            </activation>
             <properties>
                 <lwjgl.natives>natives-macos</lwjgl.natives>
             </properties>
         </profile>
         <profile>
             <id>mac-arm64</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                    <arch>aarch64</arch>
-                </os>
-            </activation>
             <properties>
                 <lwjgl.natives>natives-macos-arm64</lwjgl.natives>
             </properties>
