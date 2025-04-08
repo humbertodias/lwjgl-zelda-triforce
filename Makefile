@@ -1,6 +1,7 @@
 OS := $(shell uname -s)
 ARCH := $(shell uname -m)
 
+PLATFORM := unknown
 ifeq ($(OS),Darwin)
 	ifeq ($(ARCH),arm64)
 		PLATFORM := macos-arm64
