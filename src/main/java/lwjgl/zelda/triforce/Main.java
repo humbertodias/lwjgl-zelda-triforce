@@ -17,6 +17,9 @@ public class Main {
 
     private long window;
     private Triforce renderer;
+    private boolean isFullscreen = false;
+    private boolean wireframe = false;
+    private int windowedX, windowedY, windowedWidth = 800, windowedHeight = 600;
 
     public static void main(String[] args) {
         new Main().run();
@@ -30,78 +33,115 @@ public class Main {
     }
 
     private void init() {
-        // Set up error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
         if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
 
-        // Window hints
         glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Keep window hidden until ready
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        // Create window
-        window = glfwCreateWindow(800, 600, "Triforce", NULL, NULL);
+        window = glfwCreateWindow(windowedWidth, windowedHeight, "Triforce", NULL, NULL);
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
-        // ESC closes the window
-        glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-                glfwSetWindowShouldClose(win, true);
-        });
-
+        setupKeyCallback();
         centerWindow();
 
-        // Make OpenGL context current and enable v-sync
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
         glfwShowWindow(window);
 
-        // Create OpenGL capabilities
         GL.createCapabilities();
+
+        glfwSetFramebufferSizeCallback(window, (win, width, height) -> glViewport(0, 0, width, height));
 
         renderer = new Triforce();
     }
 
+    private void setupKeyCallback() {
+        glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
+            if (action != GLFW_PRESS) return;
+
+            switch (key) {
+                case GLFW_KEY_ESCAPE:
+                    glfwSetWindowShouldClose(win, true);
+                    break;
+                case GLFW_KEY_F:
+                    toggleFullscreen();
+                    break;
+                case GLFW_KEY_W:
+                    toggleWireframe();
+                    break;
+            }
+        });
+    }
+
+    private void toggleWireframe() {
+        wireframe = !wireframe;
+        glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+    }
+
+    private void toggleFullscreen() {
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        if (vidmode == null) return;
+
+        if (isFullscreen) {
+            glfwSetWindowMonitor(window, NULL, windowedX, windowedY, windowedWidth, windowedHeight, vidmode.refreshRate());
+            centerWindow();
+        } else {
+            saveWindowedState();
+            glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, vidmode.width(), vidmode.height(), vidmode.refreshRate());
+        }
+
+        isFullscreen = !isFullscreen;
+    }
+
+    private void saveWindowedState() {
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer x = stack.mallocInt(1);
+            IntBuffer y = stack.mallocInt(1);
+            IntBuffer width = stack.mallocInt(1);
+            IntBuffer height = stack.mallocInt(1);
+
+            glfwGetWindowPos(window, x, y);
+            glfwGetWindowSize(window, width, height);
+
+            windowedX = x.get(0);
+            windowedY = y.get(0);
+            windowedWidth = width.get(0);
+            windowedHeight = height.get(0);
+        }
+    }
+
     private void centerWindow() {
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        if (vidmode == null) return;
+
         try (MemoryStack stack = stackPush()) {
             IntBuffer width = stack.mallocInt(1);
             IntBuffer height = stack.mallocInt(1);
             glfwGetWindowSize(window, width, height);
 
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            if (vidmode != null) {
-                int screenWidth = vidmode.width();
-                int screenHeight = vidmode.height();
-                glfwSetWindowPos(
-                        window,
-                        (screenWidth - width.get(0)) / 2,
-                        (screenHeight - height.get(0)) / 2
-                );
-            }
+            int x = (vidmode.width() - width.get(0)) / 2;
+            int y = (vidmode.height() - height.get(0)) / 2;
+            glfwSetWindowPos(window, x, y);
         }
     }
 
     private void loop() {
         while (!glfwWindowShouldClose(window)) {
-            // Clear screen and depth buffer
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
             renderer.render();
-
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
     }
 
     private void cleanup() {
-        // Free window callbacks and destroy the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
-
-        // Terminate GLFW and free the error callback
         glfwTerminate();
         Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
