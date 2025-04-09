@@ -29,6 +29,8 @@ make package run
 ### Output
 ![Preview](doc/triforce.gif)
 
+F = Full screen
+W = Wireframe
 
 ### References
 
